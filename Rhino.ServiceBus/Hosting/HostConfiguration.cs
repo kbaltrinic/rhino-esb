@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Castle.Core.Configuration;
+using Rhino.ServiceBus.Config;
 
 namespace Rhino.ServiceBus.Hosting
 {
@@ -63,34 +64,35 @@ namespace Rhino.ServiceBus.Hosting
             return this;
         }
 
-        public IConfiguration ToIConfiguration()
+        public BusConfigurationSection ToBusConfiguration()
         {
-            var config = new MutableConfiguration("rhino.esb");
+            return new BusConfigurationSection();
+            //var config = new MutableConfiguration("rhino.esb");
 
-            var busConfig = config.CreateChild("bus")
-                .Attribute("endpoint", Endpoint)
-                .Attribute("threadCount", ThreadCount.ToString())
-                .Attribute("numberOfRetries", NumberOfRetries.ToString());
+            //var busConfig = config.CreateChild("bus")
+            //    .Attribute("endpoint", Endpoint)
+            //    .Attribute("threadCount", ThreadCount.ToString())
+            //    .Attribute("numberOfRetries", NumberOfRetries.ToString());
 
-            if (string.IsNullOrEmpty(Name) == false)
-                busConfig.Attribute("name", Name);
+            //if (string.IsNullOrEmpty(Name) == false)
+            //    busConfig.Attribute("name", Name);
 
-            if (string.IsNullOrEmpty(LoadBalancerEndpoint) == false)
-                busConfig.Attribute("loadBalancerEndpoint", LoadBalancerEndpoint);
+            //if (string.IsNullOrEmpty(LoadBalancerEndpoint) == false)
+            //    busConfig.Attribute("loadBalancerEndpoint", LoadBalancerEndpoint);
 
-            if (string.IsNullOrEmpty(LogEndpoint) == false)
-                busConfig.Attribute("logEndpoint", LogEndpoint);
+            //if (string.IsNullOrEmpty(LogEndpoint) == false)
+            //    busConfig.Attribute("logEndpoint", LogEndpoint);
 
-            var messagesConfig = config.CreateChild("messages");
+            //var messagesConfig = config.CreateChild("messages");
 
-            foreach (var message in Messages)
-            {
-                messagesConfig.CreateChild("add")
-                    .Attribute("name", message.Key)
-                    .Attribute("endpoint", message.Value);
-            }
+            //foreach (var message in Messages)
+            //{
+            //    messagesConfig.CreateChild("add")
+            //        .Attribute("name", message.Key)
+            //        .Attribute("endpoint", message.Value);
+            //}
 
-            return config;
+            //return config;
         }
     }
 }

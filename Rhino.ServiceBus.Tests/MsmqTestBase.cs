@@ -1,9 +1,11 @@
 using System;
 using System.Messaging;
 using Castle.MicroKernel;
+using Castle.Windsor;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Layout;
+using Rhino.ServiceBus.Castle;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Msmq;
@@ -127,7 +129,7 @@ namespace Rhino.ServiceBus.Tests
                     transport = new MsmqTransport(
                         new XmlMessageSerializer(
                         	new DefaultReflection(), 
-                        	new DefaultKernel()), 
+                        	new CastleServiceLocator(new WindsorContainer())),
                             new SubQueueStrategy(),
                             TestQueueUri.Uri, 1, 
                             defaultTransportActions,
@@ -147,7 +149,7 @@ namespace Rhino.ServiceBus.Tests
                 if (transactionalTransport == null)
                 {
                     transactionalTransport = new MsmqTransport(
-                        new XmlMessageSerializer(new DefaultReflection(), new DefaultKernel()), 
+                        new XmlMessageSerializer(new DefaultReflection(), new CastleServiceLocator(new WindsorContainer())), 
                         new SubQueueStrategy(),
                         TransactionalTestQueueUri.Uri, 
                         1,

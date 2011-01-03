@@ -39,8 +39,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Windsor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Castle.Windsor">
       <HintPath>..\SharedLibs\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Esent.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b93b4ad6c4b80595, processorArchitecture=MSIL">
@@ -120,6 +119,7 @@
     <Compile Include="Exceptions\MessagePublicationException.cs" />
     <Compile Include="Exceptions\SubscriptionException.cs" />
     <Compile Include="Exceptions\TransportException.cs" />
+    <Compile Include="LoadBalancer\LoadBalancerBootStrapper.cs" />
     <Compile Include="LoadBalancer\LoadBalancerHost.cs" />
     <Compile Include="LoadBalancer\MsmqLoadBalancer.cs" />
     <Compile Include="MessageModules\LoadBalancerMessageModule.cs" />
@@ -242,6 +242,7 @@
     <Compile Include="RhinoQueues\TimeoutAction.cs" />
     <Compile Include="Transport\TransportUtil.cs" />
     <Compile Include="Util\CurrentMessage.cs" />
+    <Compile Include="Util\ProxyUtil.cs" />
     <Compile Include="Util\UriExtensions.cs" />
     <None Include="PublicApi.cd" />
   </ItemGroup>

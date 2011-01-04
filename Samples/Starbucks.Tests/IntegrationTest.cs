@@ -10,34 +10,40 @@ using Xunit;
 
 namespace Starbucks.Tests
 {
-    public class IntegrationTest
+    public class IntegrationTest : IDisposable
     {
-        [Fact]
-        public void Can_by_coffee_from_starbucks()
+        private readonly RemoteAppDomainLoadBalancerHost baristaLoadBalancer;
+        private readonly RemoteAppDomainHost cashier;
+        private readonly RemoteAppDomainHost barista;
+        private readonly DefaultHost customerHost;
+
+        public IntegrationTest()
         {
             PrepareQueues.Prepare("msmq://localhost/starbucks.barista.balancer", QueueType.LoadBalancer);
             PrepareQueues.Prepare("msmq://localhost/starbucks.barista", QueueType.Standard);
             PrepareQueues.Prepare("msmq://localhost/starbucks.cashier", QueueType.Standard);
             PrepareQueues.Prepare("msmq://localhost/starbucks.customer", QueueType.Standard);
 
-            var baristaLoadBalancer = new RemoteAppDomainLoadBalancerHost(typeof (CastleLoadBalancerBootStrapper).Assembly, "LoadBalancer.config");
-            baristaLoadBalancer.Start();
+            baristaLoadBalancer = new RemoteAppDomainLoadBalancerHost(typeof (CastleLoadBalancerBootStrapper).Assembly, "LoadBalancer.config");
+            cashier = new RemoteAppDomainHost(typeof(CashierBootStrapper))
+                .Configuration("Cashier.config");
+            barista = new RemoteAppDomainHost(typeof(BaristaBootStrapper))
+                .Configuration("Barista.config");
+            customerHost = new DefaultHost();
+        }
 
+        [Fact]
+        public void Can_by_coffee_from_starbucks()
+        {
+            baristaLoadBalancer.Start();
             Console.WriteLine("Barista load balancer has started");
 
-            var cashier = new RemoteAppDomainHost(typeof(CashierBootStrapper))
-                .Configuration("Cashier.config");
             cashier.Start();
-
             Console.WriteLine("Cashier has started");
 
-            var barista = new RemoteAppDomainHost(typeof(BaristaBootStrapper))
-                .Configuration("Barista.config");
             barista.Start();
-
             Console.WriteLine("Barista has started");
 
-            var customerHost = new DefaultHost();
             customerHost.Start<CustomerBootStrapper>();
 
             var bus = customerHost.Bus;
@@ -52,9 +58,6 @@ namespace Starbucks.Tests
             };
 
             customer.BuyDrinkSync();
-
-            cashier.Close();
-            barista.Close();
 
             Assert.Equal("Ayende", userInterface.CoffeeRushName);
         }
@@ -72,6 +75,14 @@ namespace Starbucks.Tests
             {
                 CoffeeRushName = name;
             }
+        }
+
+        public void Dispose()
+        {
+            baristaLoadBalancer.Close();
+            customerHost.Dispose();
+            cashier.Close();
+            barista.Close();
         }
     }
 }

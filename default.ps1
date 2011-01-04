@@ -41,8 +41,17 @@ task Init -depends Clean {
 		-version $version `
 		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
     
-    Generate-Assembly-Info `
+    	Generate-Assembly-Info `
 		-file "$base_dir\Rhino.ServiceBus.Host\Properties\AssemblyInfo.cs" `
+		-title "Rhino Service Bus $version" `
+		-description "Developer friendly service bus for .NET" `
+		-company "Hibernating Rhinos" `
+		-product "Rhino Service Bus $version" `
+		-version $version `
+		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
+
+    	Generate-Assembly-Info `
+		-file "$base_dir\Rhino.ServiceBus.Castle\Properties\AssemblyInfo.cs" `
 		-title "Rhino Service Bus $version" `
 		-description "Developer friendly service bus for .NET" `
 		-company "Hibernating Rhinos" `
@@ -100,6 +109,7 @@ task Release  -depends Test{
     	$build_dir\Rhino.PersistentHashTable.dll `
     	$build_dir\Rhino.Queues.dll `
     	$build_dir\Rhino.ServiceBus.dll `
+    	$build_dir\Rhino.ServiceBus.Castle.dll `
     	$build_dir\Rhino.ServiceBus.xml `
     	$build_dir\Rhino.ServiceBus.Host.exe `
     	$build_dir\Wintellect.Threading.dll `

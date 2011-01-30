@@ -20,6 +20,7 @@ namespace Starbucks.Tests
         public IntegrationTest()
         {
             PrepareQueues.Prepare("msmq://localhost/starbucks.barista.balancer", QueueType.LoadBalancer);
+            PrepareQueues.Prepare("msmq://localhost/starbucks.barista.balancer.acceptingwork", QueueType.LoadBalancer);
             PrepareQueues.Prepare("msmq://localhost/starbucks.barista", QueueType.Standard);
             PrepareQueues.Prepare("msmq://localhost/starbucks.cashier", QueueType.Standard);
             PrepareQueues.Prepare("msmq://localhost/starbucks.customer", QueueType.Standard);
